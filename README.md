@@ -18,3 +18,4 @@ Ye AI Agent live tech job boards (Remotive, Arbeitnow, Jobicy, etc.) ko 24x7 mon
 * **`Run_Silent_Background.vbs`**: Silent background runner (no terminal window).
 * **`.env`**: Configuration for roles, skills, bot token, and minimum match score.
 
+"# ai-job-sniper" 
