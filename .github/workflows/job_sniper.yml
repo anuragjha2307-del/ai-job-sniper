@@ -1,0 +1,40 @@
+name: 24x7 AI Job Sniper Cloud
+
+on:
+  schedule:
+    # Runs every 30 minutes, 24x7x365 across all timezones
+    - cron: '*/30 * * * *'
+  workflow_dispatch: # Allows manual 1-click trigger from GitHub Actions tab
+
+jobs:
+  hunt-jobs:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # Grants permission to update seen_jobs.json
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Run AI Job Sniper
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN || '9262477323:AAGCuBjQym1sXePv48kluwIlp1qok_lyihM' }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID || '8606279053' }}
+          CANDIDATE_NAME: 'Anurag Jha'
+          CANDIDATE_GITHUB: 'https://github.com/anuragjha2307-del'
+          MIN_MATCH_SCORE: '55'
+        run: |
+          python cloud_runner.py
+
+      - name: Persist Seen Jobs History
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add seen_jobs.json || true
+          git commit -m "Auto-update seen jobs database [skip ci]" || exit 0
+          git push
